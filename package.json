@@ -7,6 +7,13 @@
     "test": "mocha -t 10s test/test.js",
     "rapidity": "mocha --require ./rapidity.js -t 10s test/test.js -R rapidity > output.html"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mauritsl/rapidity.git"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "keywords": [
     "performance",
     "timings",
@@ -18,6 +25,7 @@
     "falafel": "^1.0.1"
   },
   "devDependencies": {
+    "bluebird": "^2.9.25",
     "mocha": "^2.2.4"
   }
 }
