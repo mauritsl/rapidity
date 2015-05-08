@@ -113,7 +113,7 @@ var report = function() {
 
 module.exports = function(runner) {
   runner.on('end', function() {
-    var html = fs.readFileSync('./template.html').toString().split('/* data */');
+    var html = fs.readFileSync(__dirname + '/template.html').toString().split('/* data */');
     html = html[0] + JSON.stringify(report()) + html[2];
     console.log(html);
   });
