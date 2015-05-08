@@ -1,0 +1,23 @@
+{
+  "name": "rapidity",
+  "version": "1.0.0",
+  "description": "Performance testing of unit-tested NodeJS code",
+  "main": "rapidity.js",
+  "scripts": {
+    "test": "mocha -t 10s test/test.js",
+    "rapidity": "mocha --require ./rapidity.js -t 10s test/test.js -R rapidity > output.html"
+  },
+  "keywords": [
+    "performance",
+    "timings",
+    "testing"
+  ],
+  "author": "Maurits Lawende",
+  "license": "MIT",
+  "dependencies": {
+    "falafel": "^1.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.4"
+  }
+}

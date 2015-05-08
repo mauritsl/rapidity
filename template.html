@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Rapidity</title>
+  <meta charset="utf-8">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css"/>
+  
+  <style type="text/css">
+  .line { clear: left; white-space: pre-wrap; font-family: monospace; }
+  .line > div { float: left; padding: 0px 5px; }
+  .line .num { width: 30px; font-color: #666; text-align: right; border-right: 1px dotted #666; }
+  .highlight { background-color: lime; }
+  </style>
+
+  <script type="text/javascript"><!--
+
+  $(function() {
+
+
+    var data = /* data */[{
+      name: '/index.js',
+      lines: [
+        '"use strict";',
+        '',
+        'var test = function() {',
+        '  return x + y;',
+        '};',
+        ''
+      ], data: [
+        [1,0,1,12,341,36,170,800,3],
+        [3,4,5,1,23,2,17,80,1]
+      ]
+    }]/* data */;
+
+    var load = function() {
+      $(lines).each(function(x, line) {
+        var num = $('<div class="num"/>').text(x + 1);
+        var code = $('<div id="line' + (x + 1) + '"/>').text(line);
+        var row = $('<div class="line"/>').append(num).append(code);
+        $('.code').append(row);
+      });
+
+      $(data).each(function(x, file) {
+        var li = $('<li/>');
+        var a = $('<a href="#" class="file"/>').attr('data-file', x).text(file.name);
+        li.append(a);
+        $('#files').append(li);
+        a.click(function(e) {
+          e.preventDefault();
+          activeFile = parseInt($(this).attr('data-file'));
+          activeItem = 0;
+          update();
+        });
+      });
+    };
+
+    var reload = function() {
+      $(lines).each(function(x, line) {
+        $('#line' + (x + 1)).text(line);
+      });
+    };
+
+    var highlightLine = function(r,s,e) {
+      var element = $('#line' + r);
+      var text = lines[r - 1];
+      element.text('');
+      element.append($('<span/>').text(text.substring(0, s)));
+      element.append($('<span class="highlight"/>').text(text.substring(s, e)));
+      element.append($('<span/>').text(text.substring(e)));
+    };
+    
+    var highlight = function(rs,cs,re,ce) {
+      reload();
+      highlightLine(rs, cs, rs === re ? ce : 1e5);
+      if (re > rs) {
+        for (var i = rs + 1; i <= re; ++i) {
+          highlightLine(i, 0, i === re ? ce : 1e5);
+        }
+      }
+    };
+
+    var update = function() {
+      lines = data[activeFile].lines;
+      var item = data[activeFile].data[activeItem];
+      highlight.apply(this, item);
+      $('#mean').text(item[4]);
+      $('#stddev').text(item[5]);
+      $('#min').text(item[6]);
+      $('#max').text(item[7]);
+      $('#count').text(item[8]);
+    };
+    
+    $('#prev').click(function(e) {
+      e.preventDefault();
+      if (activeItem > 0) {
+        --activeItem;
+        update();
+      }
+    });
+    $('#next').click(function(e) {
+      e.preventDefault();
+      if (activeItem + 1 < data[activeFile].data.length) {
+        ++activeItem;
+        update();
+      }
+    });
+
+    var activeFile = 0;
+    var activeItem = 0;
+    var lines = data[0].lines;
+    
+    load();
+    if (data.length) {
+      update();
+    }
+    
+  });
+  --></script>
+</head>
+<body>
+  <div class="row">
+    <div class="small-5 large-2 columns">
+      <a href="#" id="prev" class="button tiny">&lt;</a>
+      <a href="#" id="next" class="button tiny">&gt;</a>
+      <div><strong><big><span id="mean">--</span>ms</big></strong></div>
+      <div>+/- <span id="stddev">--</span>ms</div>
+      <div>Count: <span id="count">--</span></div>
+      <div>Min: <span id="min">--</span>ms</div>
+      <div>Max: <span id="max">--</span>ms</div>
+      <ul id="files"></ul>
+    </div>
+    <div class="small-7 large-10 columns">
+      <div class="code javascript"></div>
+    </div>
+  </div>  
+</body>
+</html>
