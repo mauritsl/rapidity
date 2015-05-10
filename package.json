@@ -1,6 +1,6 @@
 {
   "name": "rapidity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Performance testing of unit-tested NodeJS code",
   "main": "rapidity.js",
   "scripts": {
